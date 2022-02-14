@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>
+		<%= title %>
+	</title>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+
+	<!-- jQuery -->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+</head>
+
+<body>
+	<!-- START OF LOADING DIV -->
+	<div id="div_load_image" class="loadingArea">
+		<img src="/images/loading.gif" style="width:300px; height:300px;">
+	</div>
+	<!-- END OF LOADING DIV -->
+
+	<h1>Pairwise 데이터셋 생성</h1>
+	<div>
+		<form name="frm" id="frm">
+			<div style="margin: 10px;">데이터 개수 : <input type="text" id="pairSetCnt" placeholder="데이터 개수를 입력하십시오."></div>
+			<div style="margin: 10px;">비교 횟수 : <input type="text" id="compCnt" placeholder="비교 횟수를 입력하십시오."></div>
+			<button type="button" id="btn_down1" style="margin: 10px;">랜덤셋 생성</button>
+			<button type="button" id="btn_down2" style="margin: 10px;">Pairwise셋 생성</button>
+		</form>
+	</div>
+
+	<script type="text/javascript">
+		$('#div_load_image').hide();
+
+		$('#btn_down1').click(function () {
+			if ($('#pairSetCnt').val() == '') {
+				alert("데이터 개수를 입력하십시오.");
+				$('#pairSetCnt').focus();
+				return false;
+			}
+			if ($('#compCnt').val() == '') {
+				alert("비교 횟수를 입력하십시오.");
+				$('#compCnt').focus();
+				return false;
+			}
+
+			location.href = '/down1?pairSetCnt=' + $('#pairSetCnt').val() + '&compCnt=' + $('#compCnt').val();
+		});
+
+		$('#btn_down2').click(function () {
+			if ($('#pairSetCnt').val() == '') {
+				alert("데이터 개수를 입력하십시오.");
+				$('#pairSetCnt').focus();
+				return false;
+			}
+			if ($('#compCnt').val() == '') {
+				alert("비교 횟수를 입력하십시오.");
+				$('#compCnt').focus();
+				return false;
+			}
+
+			location.href = '/down2?pairSetCnt=' + $('#pairSetCnt').val() + '&compCnt=' + $('#compCnt').val();
+		});
+
+	</script>
+</body>
+
+</html>
