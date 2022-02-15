@@ -6,6 +6,33 @@
 		<%= title %>
 	</title>
 	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<style>
+		.disableDiv { 
+			position:absolute; 
+			left:0; 
+			top:0;
+			width:100%; 
+			height:100%; 
+			z-index:995 ; 
+			background-color:#EEEEEE; 
+			filter:Alpha(opacity=80);
+			opacity:0.8; 
+			-moz-opaciry:0.8
+		}
+		.loadingArea {
+            position: absolute; 
+            top: 32%; 
+            left: 42%;
+            width: 0px;
+            height: 0px; 
+            z-index: 3000; 
+            filter: alpha(opacity=50); 
+            opacity: alpha*0.5; 
+            margin: auto; 
+            padding: 0; 
+            text-align: center
+        }
+	</style>
 
 	<!-- jQuery -->
 	<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -13,9 +40,10 @@
 </head>
 
 <body>
+	<div id="disableDiv" class="disableDiv" style="display:none"></div>
 	<!-- START OF LOADING DIV -->
-	<div id="div_load_image" class="loadingArea">
-		<img src="/images/loading.gif" style="width:300px; height:300px;">
+	<div id="div_load_image" class="loadingArea" style="display:none">
+		<img src="/images/loading.gif" style="width:150px; height:150px;">
 	</div>
 	<!-- END OF LOADING DIV -->
 
@@ -29,8 +57,7 @@
 		</form>
 	</div>
 
-	<script type="text/javascript">
-		$('#div_load_image').hide();
+	<script type="text/javascript">		
 
 		$('#btn_down1').click(function () {
 			if ($('#pairSetCnt').val() == '') {
@@ -43,8 +70,27 @@
 				$('#compCnt').focus();
 				return false;
 			}
+			$('#disableDiv').show();
+			$('#div_load_image').show();
 
-			location.href = '/down1?pairSetCnt=' + $('#pairSetCnt').val() + '&compCnt=' + $('#compCnt').val();
+			var params ={
+				"pairSetCnt": $('#pairSetCnt').val(),
+				"compCnt": $('#compCnt').val()
+			}
+			$.ajax({             
+				type: "GET",
+				url: "/down1Create",
+				data: params,
+				dataType : "json",
+				error : function(){
+					alert('통신실패!!');
+				},
+				success : function(data){console.log(data);
+					$('#disableDiv').hide();
+					$('#div_load_image').hide();
+					location.href = '/down1';
+				}				
+			}); 
 		});
 
 		$('#btn_down2').click(function () {
@@ -58,8 +104,27 @@
 				$('#compCnt').focus();
 				return false;
 			}
+			$('#disableDiv').show();
+			$('#div_load_image').show();
 
-			location.href = '/down2?pairSetCnt=' + $('#pairSetCnt').val() + '&compCnt=' + $('#compCnt').val();
+			var params ={
+				"pairSetCnt": $('#pairSetCnt').val(),
+				"compCnt": $('#compCnt').val()
+			}
+			$.ajax({             
+				type: "GET",
+				url: "/down2Create",
+				data: params,
+				dataType : "json",
+				error : function(){
+					alert('통신실패!!');
+				},
+				success : function(data){console.log(data);
+					$('#disableDiv').hide();
+					$('#div_load_image').hide();
+					location.href = '/down2';
+				}				
+			});			
 		});
 
 	</script>

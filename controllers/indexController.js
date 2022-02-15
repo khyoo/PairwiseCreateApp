@@ -7,7 +7,7 @@ module.exports = {
 	index: function (req, res, next) {
 		res.render('index', { title: 'Pairwise 데이터셋 생성' });
 	},
-	down1: function (req, res, next) {
+	down1Create: function (req, res, next) {
 		var pair_result = pairwise_func.random_create(Number(req.query.pairSetCnt), Number(req.query.compCnt));
 		//console.log(pair_result);
 		let idx = 1;
@@ -23,11 +23,10 @@ module.exports = {
 			idx++;
 		});
 		fs.writeFileSync('./public/randomSet.txt', str_result);
-		var file = './public/randomSet.txt';
-	
-		res.download(file);
+			
+		res.send({result:'ok'});
 	},
-	down2: function (req, res, next) {
+	down2Create: function (req, res, next) {
 		var pair_result = pairwise_func.pairwise_create(Number(req.query.pairSetCnt), Number(req.query.compCnt));
 		//console.log(pair_result);
 		let idx = 1;
@@ -43,8 +42,15 @@ module.exports = {
 			idx++;
 		});
 		fs.writeFileSync('./public/pairwiseSet.txt', str_result);
-		var file = './public/pairwiseSet.txt';
-	
+			
+		res.send({result:'ok'});
+	},
+	down1: function (req, res, next) {		
+		var file = './public/randomSet.txt';	
+		res.download(file);
+	},
+	down2: function (req, res, next) {		
+		var file = './public/pairwiseSet.txt';	
 		res.download(file);
 	},
 	down3: function (req, res, next) {
