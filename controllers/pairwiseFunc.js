@@ -1,36 +1,3 @@
-function pairwise_sort(val1, val2) {
-	var result = [];
-	if (val1 > val2) {
-		result.push(val2);
-		result.push(val1);
-	} else {
-		result.push(val1);
-		result.push(val2);
-	}
-	return result;
-}
-
-function pairwise_exist(arr, pair_result) {
-	var result = false;
-
-	for (var i = 0; i < pair_result.length; i++) {
-		let temp = pair_result[i];
-		if (temp[0] == arr[0] && temp[1] == arr[1]) {
-			result = true;
-		}
-	}
-	return result;
-}
-
-function random_shuffle(rand, pairSetCnt) {
-	for (var i = 1; i <= pairSetCnt; i++) {
-		rand.push(i);
-	}
-	rand.sort(() => Math.random() - 0.5);
-
-	return rand;
-}
-
 exports.random_create = function(pairSetCnt, compCnt) {
 	var rand = new Array();
 
@@ -99,3 +66,35 @@ exports.pairwise_create = function(pairSetCnt, compCnt) {
 	return pair_result.sort(() => Math.random() - 0.5);
 }
 
+function pairwise_sort(val1, val2) {
+	var result = [];
+	if (val1 > val2) {
+		result.push(val2);
+		result.push(val1);
+	} else {
+		result.push(val1);
+		result.push(val2);
+	}
+	return result;
+}
+
+function pairwise_exist(arr, pair_result) {
+	var result = false;
+
+	for (var i = 0; i < pair_result.length; i++) {
+		let temp = pair_result[i];
+		if (temp[0] == arr[0] && temp[1] == arr[1]) {
+			result = true;
+		}
+	}
+	return result;
+}
+
+function random_shuffle(rand, pairSetCnt) {
+	for (var i = 1; i <= pairSetCnt; i++) {
+		rand.push(i);
+	}
+	rand.sort(() => Math.random() - 0.5);
+
+	return rand;
+}
