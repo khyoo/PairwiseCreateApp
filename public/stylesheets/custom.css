@@ -1,0 +1,37 @@
+.wrap {
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	transform: translate(-50%, -40%);
+}
+.wrap div {			
+	margin: 20px 5px;
+}
+.wrap div button {
+	width: 150px;
+}
+.disableDiv { 
+	position:absolute; 
+	left:0; 
+	top:0;
+	width:100%; 
+	height:100%; 
+	z-index:995 ; 
+	background-color:#EEEEEE; 
+	filter:Alpha(opacity=80);
+	opacity:0.8; 
+	-moz-opaciry:0.8
+}
+.loadingArea {
+	position: absolute; 
+	top: 32%; 
+	left: 42%;
+	width: 0px;
+	height: 0px; 
+	z-index: 3000; 
+	filter: alpha(opacity=50); 
+	opacity: alpha*0.5; 
+	margin: auto; 
+	padding: 0; 
+	text-align: center
+}

@@ -6,60 +6,40 @@
 		<%= title %>
 	</title>
 	<link rel='stylesheet' href='/stylesheets/style.css' />
-	<style>
-		.disableDiv { 
-			position:absolute; 
-			left:0; 
-			top:0;
-			width:100%; 
-			height:100%; 
-			z-index:995 ; 
-			background-color:#EEEEEE; 
-			filter:Alpha(opacity=80);
-			opacity:0.8; 
-			-moz-opaciry:0.8
-		}
-		.loadingArea {
-            position: absolute; 
-            top: 32%; 
-            left: 42%;
-            width: 0px;
-            height: 0px; 
-            z-index: 3000; 
-            filter: alpha(opacity=50); 
-            opacity: alpha*0.5; 
-            margin: auto; 
-            padding: 0; 
-            text-align: center
-        }
-	</style>
-
+	<link rel='stylesheet' href='/stylesheets/custom.css' />
+	
 	<!-- jQuery -->
 	<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
 
 </head>
 
 <body>
-	<div id="disableDiv" class="disableDiv" style="display:none"></div>
 	<!-- START OF LOADING DIV -->
+	<div id="disableDiv" class="disableDiv" style="display:none"></div>
 	<div id="div_load_image" class="loadingArea" style="display:none">
 		<img src="/images/loading.gif" style="width:150px; height:150px;">
 	</div>
 	<!-- END OF LOADING DIV -->
 
-	<h1>Pairwise 데이터셋 생성</h1>
-	<div>
-		<form name="frm" id="frm">
-			<div style="margin: 10px;">데이터 개수 : <input type="text" id="pairSetCnt" placeholder="데이터 개수를 입력하십시오."></div>
-			<div style="margin: 10px;">비교 횟수 : <input type="text" id="compCnt" placeholder="비교 횟수를 입력하십시오."></div>
-			<button type="button" id="btn_down1" style="margin: 10px;">랜덤셋 생성</button>
-			<button type="button" id="btn_down2" style="margin: 10px;">Pairwise셋 생성</button>
-		</form>
+	<div class="wrap">
+		<h1>랜덤 그래프 데이터셋 생성</h1>
+		<div>
+			<form name="frm" id="frm">
+				<div>데이터 개수 : <input type="text" name="pairSetCnt" id="pairSetCnt" placeholder="데이터 개수를 입력하십시오."></div>
+				<div>비교 횟수 : <input type="text" name="compCnt" id="compCnt" placeholder="비교 횟수를 입력하십시오."></div>
+				<div>간격 : <input type="text" name="steps" id="steps" placeholder="간격을 입력하십시오.">&nbsp;&nbsp;&nbsp;
+					<span style="color: #f00">*원형 랜덤셋 생성시 입력</span>
+				</div>
+				<div><button type="button" id="btn_down1" class="btn_down">랜덤셋 생성</button></div>
+				<div><button type="button" id="btn_down2" class="btn_down">원형 랜덤셋 생성</button> </div>
+				<div><button type="button" id="btn_down3" class="btn_down">체이닝 랜덤셋 생성</button></div>
+			</form>		
+		</div>
 	</div>
 
-	<script type="text/javascript">		
+	<script type="text/javascript">	
 
-		$('#btn_down1').click(function () {
+		function validChk(id) {
 			if ($('#pairSetCnt').val() == '') {
 				alert("데이터 개수를 입력하십시오.");
 				$('#pairSetCnt').focus();
@@ -70,61 +50,53 @@
 				$('#compCnt').focus();
 				return false;
 			}
-			$('#disableDiv').show();
-			$('#div_load_image').show();
-
-			var params ={
-				"pairSetCnt": $('#pairSetCnt').val(),
-				"compCnt": $('#compCnt').val()
-			}
-			$.ajax({             
-				type: "GET",
-				url: "/down1Create",
-				data: params,
-				dataType : "json",
-				error : function(){
-					alert('통신실패!!');
-				},
-				success : function(data){console.log(data);
-					$('#disableDiv').hide();
-					$('#div_load_image').hide();
-					location.href = '/down1';
-				}				
-			}); 
-		});
-
-		$('#btn_down2').click(function () {
-			if ($('#pairSetCnt').val() == '') {
-				alert("데이터 개수를 입력하십시오.");
-				$('#pairSetCnt').focus();
+			if(id == 'btn_down2' && $('#steps').val() == '') {
+				alert("간격을 입력하십시오.");
+				$('#steps').focus();
 				return false;
 			}
-			if ($('#compCnt').val() == '') {
-				alert("비교 횟수를 입력하십시오.");
-				$('#compCnt').focus();
-				return false;
-			}
-			$('#disableDiv').show();
-			$('#div_load_image').show();
+			return true;
+		}	
 
-			var params ={
-				"pairSetCnt": $('#pairSetCnt').val(),
-				"compCnt": $('#compCnt').val()
+		$('.btn_down').click(function () {
+			//유효성 체크
+			if (validChk(this.id)) {
+				$('#disableDiv').show();
+				$('#div_load_image').show();
+
+				var createUrl = '', downUrl = '';
+				//console.log(this.id);
+				switch(this.id) {
+					case 'btn_down1':
+						createUrl = '/down1Create';
+						downUrl = '/down1';
+						break;
+					case 'btn_down2':
+						createUrl = '/down2Create';
+						downUrl = '/down2';
+						break;
+					case 'btn_down3':
+						createUrl = '/down3Create';
+						downUrl = '/down3';
+						break;
+				}
+
+				$.ajax({             
+					type: "GET",
+					url: createUrl,
+					data: $('#frm').serialize(),
+					dataType : "json",
+					error : function(){
+						alert('에러가 발생했습니다.');
+					},
+					success : function(data){console.log(data);
+						$('#disableDiv').hide();
+						$('#div_load_image').hide();
+
+						location.href = downUrl;
+					}				
+				}); 
 			}
-			$.ajax({             
-				type: "GET",
-				url: "/down2Create",
-				data: params,
-				dataType : "json",
-				error : function(){
-					alert('통신실패!!');
-				},
-				success : function(data){console.log(data);
-					$('#disableDiv').hide();
-					$('#div_load_image').hide();
-					location.href = '/down2';
-				}				
-			});			
 		});
 
 	</script>
