@@ -7,22 +7,16 @@ exports.random_create = function(pairSetCnt, compCnt) {
 	let c1, c2;
 
 	while (k >= 1) {
-		while (rand.length > 0) {
-			let r_idx1 = Math.floor(Math.random() * rand.length);
-			c1 = rand[r_idx1];
-			rand.splice(r_idx1, 1);
-
-			let r_idx2 = Math.floor(Math.random() * rand.length);
-			c2 = rand[r_idx2];
+		while (rand.length > 0) {			
+			c1 = randomPoll(rand);			
+			c2 = randomPoll(rand);
 
 			while (pairwise_exist(pairwise_sort(c1, c2), pair_result)) {
-				r_idx2 = Math.floor(Math.random() * rand.length);
-				c2 = rand[r_idx2];
-			}
-			rand.splice(r_idx2, 1);
+				rand.push(c2);
+				c2 = randomPoll(rand);
+			}			
 			pair_result.push(pairwise_sort(c1, c2))
 		}
-
 		rand = random_shuffle(pairSetCnt);
 
 		k = k - 1;
@@ -32,34 +26,36 @@ exports.random_create = function(pairSetCnt, compCnt) {
 
 exports.ringRandom_create = function(pairSetCnt, compCnt, steps) {
 	let rand = random_shuffle(pairSetCnt);
-
+	
 	let pair_result = new Array();
 
 	let k = compCnt;
-	let head, c1, c2;
-
+	let c1, c2;
+	steps = 1;
 	while (k >= 2) {
-		head = c1 = rand.shift();
+		c1 = rand[0];
+		let idx1 = 0, idx2 = steps;
 
-		while (rand.length > 0) {
-			c2 = rand[0];
+		while ((rand.length-1) >= idx1) {
+			c2 = rand[idx2];			
+			//pair_result.push(pairwise_sort(c1, c2));
+			pair_result.push([c1, c2]);
 
-			let idx = 0;
-			while (pairwise_exist(pairwise_sort(c1, c2), pair_result)) {
-				c2 = rand[++idx];
+			idx1++;
+			idx2 = steps + idx1;
+			if (idx2 > (rand.length-1)) {
+				idx2 = idx2 - rand.length;
 			}
-			rand.splice(idx, 1);
-			pair_result.push(pairwise_sort(c1, c2))
 
-			c1 = c2;
+			c1 = rand[idx1];
 		}
-		pair_result.push(pairwise_sort(head, c1))
-
-		rand = random_shuffle(pairSetCnt);
-
+		steps++;
 		k = k - 2;
 	}
-	return pair_result.sort(() => Math.random() - 0.5);
+	if (k == 1 && rand.length >= 2) {
+		disjointPairwise_create(rand, pair_result);
+	}
+	return pair_result;//.sort(() => Math.random() - 0.5);
 }
 
 exports.chainRandom_create = function(pairSetCnt, compCnt) {
