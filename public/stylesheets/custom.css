@@ -10,6 +10,11 @@
 .wrap div button {
 	width: 150px;
 }
+.github {
+	position: absolute;
+	bottom: 30px;
+	right: 30px;
+}
 .disableDiv { 
 	position:absolute; 
 	left:0; 
